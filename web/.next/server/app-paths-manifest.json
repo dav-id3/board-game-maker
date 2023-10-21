@@ -1,0 +1,5 @@
+{
+  "/(routes)/home/page": "app/(routes)/home/page.js",
+  "/(routes)/userpage/[userid]/page": "app/(routes)/userpage/[userid]/page.js",
+  "/(routes)/userpage/[userid]/playground/page": "app/(routes)/userpage/[userid]/playground/page.js"
+}
