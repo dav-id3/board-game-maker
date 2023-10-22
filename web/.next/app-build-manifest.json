@@ -1,14 +1,9 @@
 {
   "pages": {
-    "/(routes)/home/page": [
+    "/(routes)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(routes)/home/page.js"
-    ],
-    "/(routes)/home/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(routes)/home/layout.js"
+      "static/chunks/app/(routes)/page.js"
     ],
     "/(routes)/layout": [
       "static/chunks/webpack.js",
@@ -16,20 +11,30 @@
       "static/css/app/(routes)/layout.css",
       "static/chunks/app/(routes)/layout.js"
     ],
-    "/(routes)/userpage/layout": [
+    "/(routes)/home/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(routes)/userpage/layout.js"
+      "static/chunks/app/(routes)/home/layout.js"
+    ],
+    "/(routes)/home/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(routes)/home/page.js"
     ],
     "/(routes)/userpage/[userid]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(routes)/userpage/[userid]/page.js"
     ],
-    "/(routes)/userpage/[userid]/playground/page": [
+    "/(routes)/userpage/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(routes)/userpage/[userid]/playground/page.js"
+      "static/chunks/app/(routes)/userpage/layout.js"
+    ],
+    "/(routes)/userpage/[userid]/chat/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(routes)/userpage/[userid]/chat/page.js"
     ]
   }
 }

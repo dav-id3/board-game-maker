@@ -8,8 +8,8 @@ import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 
 const navigation = [
-  { name: "Game", href: "/userpage/testid" }, // sessionを取得して動的にid部分変えられるかも
-  { name: "Playground", href: "/userpage/testid/playground" },
+  { name: "Game", href: "/userpage/dev" }, // sessionを取得して動的にid部分変えられるかも
+  { name: "Chat", href: "/userpage/dev/chat" },
 ];
 
 function classNames(...classes: string[]) {
