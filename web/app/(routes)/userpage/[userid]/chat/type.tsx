@@ -1,4 +1,7 @@
 export interface Message {
-  name: string;
-  text: string;
+  topic: string; // = "message"
+  data: {
+    name: string;
+    text: string;
+  };
 }

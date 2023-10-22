@@ -21,20 +21,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(routes)/home/page.js"
     ],
-    "/(routes)/userpage/[userid]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(routes)/userpage/[userid]/page.js"
-    ],
     "/(routes)/userpage/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(routes)/userpage/layout.js"
     ],
+    "/(routes)/userpage/[userid]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(routes)/userpage/[userid]/page.js"
+    ],
     "/(routes)/userpage/[userid]/chat/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(routes)/userpage/[userid]/chat/page.js"
+    ],
+    "/(routes)/userpage/[userid]/game/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(routes)/userpage/[userid]/game/page.js"
     ]
   }
 }
