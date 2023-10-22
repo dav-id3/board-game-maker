@@ -13,8 +13,11 @@ type Props = {
 
 export const Chat: FC<Props> = ({ userid }) => {
   const { messages, sendMessage } = useChatService({
-    name: "",
-    text: `ようこそ、${userid}さん`,
+    topic: "message",
+    data: {
+      name: "",
+      text: `ようこそ、${userid}さん`,
+    },
   });
 
   const { data: session, status } = useSession();
@@ -26,7 +29,10 @@ export const Chat: FC<Props> = ({ userid }) => {
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (session?.user?.name !== undefined && session?.user?.name!) {
-      const newMessage: Message = { name: session?.user?.name, text: text };
+      const newMessage: Message = {
+        topic: "message",
+        data: { name: session?.user?.name, text: text },
+      };
       sendMessage(newMessage);
       setText("");
     }
@@ -49,8 +55,8 @@ export const Chat: FC<Props> = ({ userid }) => {
           return (
             <div>
               <li key={idx}>
-                <span>{msg.name}</span>
-                <span>{msg.text}</span>
+                <span>{msg.data.name}</span>
+                <span>{msg.data.text}</span>
               </li>
             </div>
           );

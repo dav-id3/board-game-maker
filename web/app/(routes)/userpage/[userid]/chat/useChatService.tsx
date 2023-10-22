@@ -20,7 +20,9 @@ export const useChatService = (initialMessage: Message) => {
     // @ts-ignore
     socketRef.current.on("broadcast", (payload: Message) => {
       console.log("Recieved: " + payload);
-      setMessages((prevMessages) => [...prevMessages, payload]);
+      if (payload.topic === "message") {
+        setMessages((prevMessages) => [...prevMessages, payload]);
+      }
     });
     return () => {
       console.log("Disconnecting..");
