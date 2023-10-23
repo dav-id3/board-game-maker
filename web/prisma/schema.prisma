@@ -50,3 +50,19 @@ model ShownUser {
 
   @@map("shown_users")
 }
+
+model Messages {
+  id Int @id @default(autoincrement())
+  name String?
+  text String?
+  
+  @@map("messages")
+}
+
+model CardStates {
+  id String @id
+  x Int?
+  y Int?
+
+  @@map("card_states")
+}
