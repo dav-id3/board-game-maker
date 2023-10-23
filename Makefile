@@ -1,20 +1,15 @@
 #!make
 
-cmd=current
-
 PROJECT_NAME := board-game-maker
 DOCKER_NETWORK := $(PROJECT_NAME)-network
 
 #port
-MYSQL_PORT := 3306
 WEB_PORT := 3000
 
 #containers name
-DATABASE_CONTAINER := $(PROJECT_NAME)-db
 WEB_CONTAINER := $(PROJECT_NAME)-web
 
 #path
-DATABASE_FOLDER := $(CURDIR)/db
 WEB_FOLDER := $(CURDIR)/web
 ENVFILE_FOLDER := $(CURDIR)/envfiles
 
@@ -27,27 +22,6 @@ network.create:
 network.remove:
 	@docker network rm $(DOCKER_NETWORK)
 
-##Database
-.PHONY: db.build
-db.build:
-	@docker build \
-		-f $(DATABASE_FOLDER)/Dockerfile \
-		-t $(DATABASE_CONTAINER) $(DATABASE_FOLDER) 
-
-.PHONY: db.start
-db.start:
-	@docker run -d --rm \
-		--env-file $(ENVFILE_FOLDER)/.db \
-		--net $(DOCKER_NETWORK) \
-		--name $(DATABASE_CONTAINER) \
-		--volume $(DATABASE_FOLDER)/data:/var/lib/mysql:rw \
-		--publish $(MYSQL_PORT):3306 \
-		$(DATABASE_CONTAINER)
-
-.PHONY: db.exec
-db.exec:
-	@docker exec -it $(DATABASE_CONTAINER) /bin/bash
-		
 
 ##NEXT JS (REACT)
 .PHONY: web.build
