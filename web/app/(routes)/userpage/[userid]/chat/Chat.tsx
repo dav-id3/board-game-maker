@@ -15,8 +15,8 @@ export const Chat: FC<Props> = ({ userid }) => {
   const { messages, sendMessage } = useChatService({
     topic: "message",
     data: {
-      name: "",
-      text: `ようこそ、${userid}さん`,
+      name: "admin",
+      text: `${userid}さんが入室しました`,
     },
   });
 
@@ -38,30 +38,40 @@ export const Chat: FC<Props> = ({ userid }) => {
     }
   };
   return (
-    <div>
-      <div className="input">
-        <input
-          type="text"
-          placeholder="メッセージ"
-          value={text}
-          onChange={handleInputChange}
-        />
-        <button disabled={!text} onClick={handleButtonClick}>
-          送信
-        </button>
+    <div className="relative h-full gap-4">
+      <div>
+        <ul>
+          {messages.map((msg, idx) => {
+            return (
+              <div>
+                <li key={idx}>
+                  {msg.data.name === "admin" ? (
+                    <span>{msg.data.text}</span>
+                  ) : (
+                    <>
+                      <span>{msg.data.name}: </span>
+                      <span>{msg.data.text}</span>
+                    </>
+                  )}
+                </li>
+              </div>
+            );
+          })}
+        </ul>
       </div>
-      <ul>
-        {messages.map((msg, idx) => {
-          return (
-            <div>
-              <li key={idx}>
-                <span>{msg.data.name}</span>
-                <span>{msg.data.text}</span>
-              </li>
-            </div>
-          );
-        })}
-      </ul>
+      <div className="absolute w-full bottom-5">
+        <div className="input">
+          <input
+            type="text"
+            placeholder="メッセージ"
+            value={text}
+            onChange={handleInputChange}
+          />
+          <button disabled={!text} onClick={handleButtonClick}>
+            送信
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

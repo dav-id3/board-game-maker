@@ -8,6 +8,7 @@ import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 
 const navigation = [
+  { name: "Home", href: "/userpage/dev" },
   { name: "Game", href: "/userpage/dev/game" }, // sessionを取得して動的にid部分変えられるかも
   { name: "Chat", href: "/userpage/dev/chat" },
 ];
@@ -23,7 +24,7 @@ export default function Navbar({ user }: { user: any }) {
     <Disclosure as="nav" className="bg-white shadow-sm">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
