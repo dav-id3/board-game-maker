@@ -61,8 +61,8 @@ model Messages {
 
 model CardStates {
   id String @id
-  x Int?
-  y Int?
+  x Int
+  y Int
 
   @@map("card_states")
 }
