@@ -1,4 +1,0 @@
-{
-  "/(routes)/userpage/[userid]/game/page": "app/(routes)/userpage/[userid]/game/page.js",
-  "/(routes)/userpage/[userid]/page": "app/(routes)/userpage/[userid]/page.js"
-}
