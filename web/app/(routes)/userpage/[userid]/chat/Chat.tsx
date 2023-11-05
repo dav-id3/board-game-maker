@@ -8,17 +8,11 @@ import { FC } from "react";
 import { useSession } from "next-auth/react";
 
 type Props = {
-  userid: string;
+  initialMessages: Message[];
 };
 
-export const Chat: FC<Props> = ({ userid }) => {
-  const { messages, sendMessage } = useChatService({
-    topic: "message",
-    data: {
-      name: "admin",
-      text: `${userid}さんが入室しました`,
-    },
-  });
+export const Chat: FC<Props> = ({ initialMessages }) => {
+  const { messages, sendMessage } = useChatService(initialMessages);
 
   const { data: session, status } = useSession();
   const [text, setText] = useState("");

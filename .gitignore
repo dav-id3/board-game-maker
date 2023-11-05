@@ -9,7 +9,7 @@ web/.pnp
 web/coverage
 
 # next.js
-.next/
+.next
 web/out/
 
 # production
