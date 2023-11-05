@@ -5,8 +5,8 @@ import { Message } from "./type";
 const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_HOST + ":" + process.env.NEXT_PUBLIC_API_PORT;
 
-export const useChatService = (initialMessage: Message) => {
-  const [messages, setMessages] = useState<Message[]>([initialMessage]);
+export const useChatService = (initialMessages: Message[]) => {
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
 
   const socketRef = useRef();
 

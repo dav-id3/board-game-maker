@@ -53,8 +53,8 @@ model ShownUser {
 
 model Messages {
   id Int @id @default(autoincrement())
-  name String?
-  text String?
+  name String
+  text String
   
   @@map("messages")
 }
