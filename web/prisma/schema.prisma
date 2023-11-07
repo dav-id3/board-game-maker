@@ -61,6 +61,7 @@ model Messages {
 
 model CardStates {
   id String @id
+  itemType String @map("item_type") @default("card")
   x Int
   y Int
 
