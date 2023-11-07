@@ -4,6 +4,7 @@ export interface CardState {
   // componentTyoe=Deckの時はDeckならDraggable部分をコンポーネントで別ファイルで分けてシャッフル関数を作る？
   data: {
     id: string | number;
+    itemType: string; // = "card" or "deck"
     activeDrags: boolean;
     defaultPosition: {
       x: number;
@@ -17,11 +18,5 @@ export interface CardState {
       x: number;
       y: number;
     };
-  };
-}
-
-export interface DeckState extends CardState {
-  data: {
-    componentType: string;
   };
 }

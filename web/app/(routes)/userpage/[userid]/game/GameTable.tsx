@@ -6,6 +6,8 @@ import React, { ReactNode, ReactElement } from "react";
 import { useCardState } from "./useCardState";
 import { CardState } from "./type";
 import { FC } from "react";
+import { GameCard } from "./GameCard";
+import { GameDeck } from "./GameDeck";
 
 type Props = {
   initialCardState: CardState[];
@@ -23,6 +25,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       topic: "cardState",
       data: {
         id: selectedId,
+        itemType: targetCardState.data.itemType,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -47,6 +50,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       topic: "cardState",
       data: {
         id: selectedId,
+        itemType: targetCardState.data.itemType,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x + ui.deltaX,
@@ -94,6 +98,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       topic: "cardState",
       data: {
         id: selectedId,
+        itemType: targetCardState.data.itemType,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -120,6 +125,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       topic: "cardState",
       data: {
         id: selectedId,
+        itemType: targetCardState.data.itemType,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -145,6 +151,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       topic: "cardState",
       data: {
         id: selectedId,
+        itemType: targetCardState.data.itemType,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -171,33 +178,23 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
 
   return (
     <div>
-      {cardState.map((value: CardState) => (
-        <Draggable
-          onDrag={handleDrag}
-          onMouseDown={() => setSelectedId(value.data.id)}
-          position={{
-            x: value.data.deltaPosition.x,
-            y: value.data.deltaPosition.y,
-          }}
-        >
-          <div className="absolute rounded-2xl w-[160px] h-[160px] p-0.5 z-10 left-0 right-0 ">
-            <div className="rounded-[14px] w-full h-full bg-white border border-gray-300 flex flex-col items-center justify-center space-y-3 px-5">
-              <div className="text-white text-[14px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[100px] h-[30px] flex items-center justify-center">
-                title
-              </div>
-              <div>content</div>
-              <div>
-                x: {value.data.deltaPosition.x.toFixed(0)}, y:{" "}
-                {value.data.deltaPosition.y.toFixed(0)}
-              </div>
-              <div>
-                def x: {value.data.defaultPosition.x.toFixed(0)}, y:{" "}
-                {value.data.defaultPosition.y.toFixed(0)}
-              </div>
-            </div>
-          </div>
-        </Draggable>
-      ))}
+      {cardState.map((value: CardState) =>
+        value.data.itemType === "card" ? (
+          <GameCard
+            cardState={value}
+            onDrag={handleDrag}
+            onMouseDown={() => setSelectedId(value.data.id)}
+          />
+        ) : value.data.itemType === "deck" ? (
+          <GameDeck
+            cardState={value}
+            onDrag={handleDrag}
+            onMouseDown={() => setSelectedId(value.data.id)}
+          />
+        ) : (
+          <>{value.data.itemType}</>
+        )
+      )}
     </div>
   );
 };

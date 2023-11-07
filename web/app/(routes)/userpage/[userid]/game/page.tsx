@@ -11,12 +11,15 @@ export default async function GamePage() {
   const getInitialState = async () => {
     const feed = await prisma.cardStates.findMany();
     if (feed === null) {
+      console.log("null!");
       return [];
     } else {
+      console.log(feed);
       return feed.map((value) => ({
         topic: "cardState",
         data: {
           id: value.id,
+          itemType: value.itemType,
           activeDrags: false,
           defaultPosition: {
             x: 0 + Number(value.id) * 160,
