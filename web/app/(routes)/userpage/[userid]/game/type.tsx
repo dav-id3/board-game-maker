@@ -5,6 +5,7 @@ export interface CardState {
   data: {
     id: string | number;
     itemType: string; // = "card" or "deck"
+    isFlipped: boolean;
     activeDrags: boolean;
     defaultPosition: {
       x: number;

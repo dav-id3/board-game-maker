@@ -7,14 +7,27 @@ import { useCardState } from "./useCardState";
 import { CardState } from "./type";
 import { FC } from "react";
 import { DraggableEventHandler } from "react-draggable";
+import { MouseEventHandler } from "react";
 
 type Props = {
   cardState: CardState;
   onDrag: DraggableEventHandler | undefined;
   onMouseDown: ((e: MouseEvent) => void) | undefined;
+  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
 };
 
-export const GameCard: FC<Props> = ({ cardState, onDrag, onMouseDown }) => {
+const rotatingCard =
+  "relative w-full h-full [transform-style:preserve-3d] [transform:rotateY(180deg)] duration-1000";
+const notRotatingCard =
+  "relative w-full h-full [transform-style:preserve-3d] duration-1000";
+
+export const GameCard: FC<Props> = ({
+  cardState,
+  onDrag,
+  onMouseDown,
+  onClick,
+}) => {
+  const cardStyle = cardState.data.isFlipped ? rotatingCard : notRotatingCard;
   return (
     <>
       <Draggable
@@ -25,19 +38,33 @@ export const GameCard: FC<Props> = ({ cardState, onDrag, onMouseDown }) => {
           y: cardState.data.deltaPosition.y,
         }}
       >
-        <div className="absolute group rounded-2xl w-[160px] h-[160px] p-0.5 z-10 left-0 right-0 ">
-          <div className="rounded-[14px] w-full h-full bg-white border border-gray-300 flex flex-col items-center justify-center space-y-3 px-5 group-click:[transform:rotateY(180deg)]">
-            <div className="text-white text-[14px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[100px] h-[30px] flex items-center justify-center">
-              title
+        <div className="absolute rounded-2xl w-[160px] h-[160px] bg-transparent p-0.5 z-10 left-0 right-0 [perspective:1000px] group">
+          <div className={cardStyle}>
+            <div className="absolute rounded-[14px] w-full h-full bg-white border border-gray-300 [backfaceVisibility:hidden]">
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-white text-[14px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[100px] h-[30px] flex items-center justify-center">
+                  title
+                </div>
+                <div>content</div>
+                <div>
+                  x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
+                  {cardState.data.deltaPosition.y.toFixed(0)}
+                </div>
+                <button onClick={onClick}>flip to back</button>
+              </div>
             </div>
-            <div>content</div>
-            <div>
-              x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
-              {cardState.data.deltaPosition.y.toFixed(0)}
-            </div>
-            <div>
-              def x: {cardState.data.defaultPosition.x.toFixed(0)}, y:{" "}
-              {cardState.data.defaultPosition.y.toFixed(0)}
+            <div className="absolute rounded-[14px] w-full h-full bg-white border border-gray-300 [transform:rotateY(180deg)] [backfaceVisibility:hidden]">
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-white text-[14px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[100px] h-[30px] flex items-center justify-center">
+                  title
+                </div>
+                <div>this is back</div>
+                <div>
+                  x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
+                  {cardState.data.deltaPosition.y.toFixed(0)}
+                </div>
+                <button onClick={onClick}>flip to front</button>
+              </div>
             </div>
           </div>
         </div>

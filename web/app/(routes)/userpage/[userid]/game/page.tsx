@@ -11,7 +11,6 @@ export default async function GamePage() {
   const getInitialState = async () => {
     const feed = await prisma.cardStates.findMany();
     if (feed === null) {
-      console.log("null!");
       return [];
     } else {
       console.log(feed);
@@ -20,10 +19,11 @@ export default async function GamePage() {
         data: {
           id: value.id,
           itemType: value.itemType,
+          isFlipped: value.isFlipped,
           activeDrags: false,
           defaultPosition: {
-            x: 0 + Number(value.id) * 160,
-            y: 0 + Number(value.id) * 160,
+            x: 0, //+ Number(value.id) * 160,
+            y: 0, //+ Number(value.id) * 160,
           },
           deltaPosition: {
             x: value.x,
