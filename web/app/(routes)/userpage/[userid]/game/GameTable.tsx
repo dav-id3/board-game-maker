@@ -26,6 +26,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       data: {
         id: selectedId,
         itemType: targetCardState.data.itemType,
+        isFlipped: targetCardState.data.isFlipped,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -34,6 +35,34 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         deltaPosition: {
           x: targetCardState.data.deltaPosition.x + ui.deltaX,
           y: targetCardState.data.deltaPosition.y + ui.deltaY,
+        },
+        controlledPosition: {
+          x: targetCardState.data.controlledPosition.x,
+          y: targetCardState.data.controlledPosition.y,
+        },
+      },
+    });
+  };
+  const handleFlip = () => {
+    const targetCardState = cardState.filter(
+      (value: CardState) => value.data.id === selectedId
+    )[0];
+    console.log(targetCardState);
+    console.log(targetCardState.data.isFlipped);
+    sendCardState({
+      topic: "cardState",
+      data: {
+        id: selectedId,
+        itemType: targetCardState.data.itemType,
+        isFlipped: !targetCardState.data.isFlipped,
+        activeDrags: targetCardState.data.activeDrags,
+        defaultPosition: {
+          x: targetCardState.data.defaultPosition.x,
+          y: targetCardState.data.defaultPosition.y,
+        },
+        deltaPosition: {
+          x: targetCardState.data.deltaPosition.x,
+          y: targetCardState.data.deltaPosition.y,
         },
         controlledPosition: {
           x: targetCardState.data.controlledPosition.x,
@@ -51,6 +80,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       data: {
         id: selectedId,
         itemType: targetCardState.data.itemType,
+        isFlipped: targetCardState.data.isFlipped,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x + ui.deltaX,
@@ -99,6 +129,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       data: {
         id: selectedId,
         itemType: targetCardState.data.itemType,
+        isFlipped: targetCardState.data.isFlipped,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -126,6 +157,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       data: {
         id: selectedId,
         itemType: targetCardState.data.itemType,
+        isFlipped: targetCardState.data.isFlipped,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -152,6 +184,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       data: {
         id: selectedId,
         itemType: targetCardState.data.itemType,
+        isFlipped: targetCardState.data.isFlipped,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -184,6 +217,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
             cardState={value}
             onDrag={handleDrag}
             onMouseDown={() => setSelectedId(value.data.id)}
+            onClick={handleFlip}
           />
         ) : value.data.itemType === "deck" ? (
           <GameDeck
