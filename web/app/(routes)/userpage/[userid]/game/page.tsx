@@ -14,12 +14,13 @@ export default async function GamePage() {
       return [];
     } else {
       console.log(feed);
-      return feed.map((value) => ({
+      return feed.map((value, i) => ({
         topic: "cardState",
         data: {
           id: value.id,
           itemType: value.itemType,
           isFlipped: value.isFlipped,
+          zIndex: value.zIndex,
           activeDrags: false,
           defaultPosition: {
             x: 0, //+ Number(value.id) * 160,
