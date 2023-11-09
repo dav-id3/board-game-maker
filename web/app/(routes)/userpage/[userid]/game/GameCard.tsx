@@ -8,12 +8,14 @@ import { CardState } from "./type";
 import { FC } from "react";
 import { DraggableEventHandler } from "react-draggable";
 import { MouseEventHandler } from "react";
+import { on } from "events";
 
 type Props = {
   cardState: CardState;
   onDrag: DraggableEventHandler | undefined;
   onMouseDown: ((e: MouseEvent) => void) | undefined;
-  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
+  onClick: MouseEventHandler<HTMLDivElement> | undefined;
+  onDoubleClick: MouseEventHandler<HTMLDivElement> | undefined;
 };
 
 const rotatingCard =
@@ -26,9 +28,11 @@ export const GameCard: FC<Props> = ({
   onDrag,
   onMouseDown,
   onClick,
+  onDoubleClick,
 }) => {
   const cardStyle = cardState.data.isFlipped ? rotatingCard : notRotatingCard;
   return (
+    // <div className={`z-${cardState.data.zIndex}`}>
     <>
       <Draggable
         onDrag={onDrag}
@@ -38,7 +42,12 @@ export const GameCard: FC<Props> = ({
           y: cardState.data.deltaPosition.y,
         }}
       >
-        <div className="absolute rounded-2xl w-[160px] h-[160px] bg-transparent p-0.5 z-10 left-0 right-0 [perspective:1000px] group">
+        <div
+          className={`absolute rounded-2xl w-[160px] h-[160px] bg-transparent p-0.5 z-${cardState.data.zIndex} left-0 right-0 [perspective:1000px] group`}
+          // className={`absolute rounded-2xl w-[160px] h-[160px] bg-transparent p-0.5 z-${10} left-0 right-0 [perspective:1000px] group`}
+          onDoubleClick={onDoubleClick}
+          onClick={onClick}
+        >
           <div className={cardStyle}>
             <div className="absolute rounded-[14px] w-full h-full bg-white border border-gray-300 [backfaceVisibility:hidden]">
               <div className="flex flex-col items-center justify-center">
@@ -50,7 +59,7 @@ export const GameCard: FC<Props> = ({
                   x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
                   {cardState.data.deltaPosition.y.toFixed(0)}
                 </div>
-                <button onClick={onClick}>flip to back</button>
+                <div>z index: {cardState.data.zIndex}</div>
               </div>
             </div>
             <div className="absolute rounded-[14px] w-full h-full bg-white border border-gray-300 [transform:rotateY(180deg)] [backfaceVisibility:hidden]">
@@ -63,13 +72,14 @@ export const GameCard: FC<Props> = ({
                   x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
                   {cardState.data.deltaPosition.y.toFixed(0)}
                 </div>
-                <button onClick={onClick}>flip to front</button>
+                <div>z index: {cardState.data.zIndex}</div>
               </div>
             </div>
           </div>
         </div>
       </Draggable>
     </>
+    // </div>
   );
 };
 

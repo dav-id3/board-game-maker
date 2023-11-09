@@ -27,6 +27,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         id: selectedId,
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
+        zIndex: targetCardState.data.zIndex,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -55,6 +56,42 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         id: selectedId,
         itemType: targetCardState.data.itemType,
         isFlipped: !targetCardState.data.isFlipped,
+        zIndex: targetCardState.data.zIndex,
+        activeDrags: targetCardState.data.activeDrags,
+        defaultPosition: {
+          x: targetCardState.data.defaultPosition.x,
+          y: targetCardState.data.defaultPosition.y,
+        },
+        deltaPosition: {
+          x: targetCardState.data.deltaPosition.x,
+          y: targetCardState.data.deltaPosition.y,
+        },
+        controlledPosition: {
+          x: targetCardState.data.controlledPosition.x,
+          y: targetCardState.data.controlledPosition.y,
+        },
+      },
+    });
+  };
+  const handleMoveToFront = () => {
+    const targetCardState = cardState.filter(
+      (value: CardState) => value.data.id === selectedId
+    )[0];
+
+    let maxZIndex = 0;
+    cardState.forEach((value: CardState) => {
+      if (value.data.zIndex > maxZIndex) {
+        maxZIndex = value.data.zIndex;
+      }
+    });
+
+    sendCardState({
+      topic: "cardState",
+      data: {
+        id: selectedId,
+        itemType: targetCardState.data.itemType,
+        isFlipped: targetCardState.data.isFlipped,
+        zIndex: maxZIndex + 1,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -81,6 +118,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         id: selectedId,
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
+        zIndex: targetCardState.data.zIndex,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x + ui.deltaX,
@@ -130,6 +168,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         id: selectedId,
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
+        zIndex: targetCardState.data.zIndex,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -158,6 +197,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         id: selectedId,
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
+        zIndex: targetCardState.data.zIndex,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -185,6 +225,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         id: selectedId,
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
+        zIndex: targetCardState.data.zIndex,
         activeDrags: targetCardState.data.activeDrags,
         defaultPosition: {
           x: targetCardState.data.defaultPosition.x,
@@ -213,13 +254,16 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
     <div>
       {cardState.map((value: CardState) =>
         value.data.itemType === "card" ? (
+          // <div style={{ zIndex: Number(value.data.id) * 10 }}>
           <GameCard
             cardState={value}
             onDrag={handleDrag}
             onMouseDown={() => setSelectedId(value.data.id)}
-            onClick={handleFlip}
+            onClick={handleMoveToFront}
+            onDoubleClick={handleFlip}
           />
-        ) : value.data.itemType === "deck" ? (
+        ) : // </div>
+        value.data.itemType === "deck" ? (
           <GameDeck
             cardState={value}
             onDrag={handleDrag}
