@@ -14,7 +14,6 @@ type Props = {
   cardState: CardState;
   onDrag: DraggableEventHandler | undefined;
   onMouseDown: ((e: MouseEvent) => void) | undefined;
-  onClick: MouseEventHandler<HTMLDivElement> | undefined;
   onDoubleClick: MouseEventHandler<HTMLDivElement> | undefined;
 };
 
@@ -27,12 +26,10 @@ export const GameCard: FC<Props> = ({
   cardState,
   onDrag,
   onMouseDown,
-  onClick,
   onDoubleClick,
 }) => {
   const cardStyle = cardState.data.isFlipped ? rotatingCard : notRotatingCard;
   return (
-    // <div className={`z-${cardState.data.zIndex}`}>
     <>
       <Draggable
         onDrag={onDrag}
@@ -43,10 +40,11 @@ export const GameCard: FC<Props> = ({
         }}
       >
         <div
-          className={`absolute rounded-2xl w-[160px] h-[160px] bg-transparent p-0.5 z-${cardState.data.zIndex} left-0 right-0 [perspective:1000px] group`}
-          // className={`absolute rounded-2xl w-[160px] h-[160px] bg-transparent p-0.5 z-${10} left-0 right-0 [perspective:1000px] group`}
+          style={{
+            zIndex: cardState.data.zIndex,
+          }}
+          className={`absolute rounded-2xl w-[160px] h-[160px] bg-transparent p-0.5 left-0 right-0 [perspective:1000px] group`}
           onDoubleClick={onDoubleClick}
-          onClick={onClick}
         >
           <div className={cardStyle}>
             <div className="absolute rounded-[14px] w-full h-full bg-white border border-gray-300 [backfaceVisibility:hidden]">
@@ -64,22 +62,20 @@ export const GameCard: FC<Props> = ({
             </div>
             <div className="absolute rounded-[14px] w-full h-full bg-white border border-gray-300 [transform:rotateY(180deg)] [backfaceVisibility:hidden]">
               <div className="flex flex-col items-center justify-center">
-                <div className="text-white text-[14px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[100px] h-[30px] flex items-center justify-center">
+                {/* <div className="text-white text-[14px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[100px] h-[30px] flex items-center justify-center">
                   title
-                </div>
+                </div> */}
                 <div>this is back</div>
                 <div>
                   x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
                   {cardState.data.deltaPosition.y.toFixed(0)}
                 </div>
-                <div>z index: {cardState.data.zIndex}</div>
               </div>
             </div>
           </div>
         </div>
       </Draggable>
     </>
-    // </div>
   );
 };
 
