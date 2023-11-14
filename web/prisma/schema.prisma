@@ -51,8 +51,15 @@ model ShownUser {
   @@map("shown_users")
 }
 
+model GameTables {
+  tableId String @id @map("table_id") @default(uuid())
+  @@map("game_tables")
+}
+
+
 model Messages {
   id Int @id @default(autoincrement())
+  tableId String @map("table_id") @default("dev")
   name String
   text String
   
@@ -61,6 +68,7 @@ model Messages {
 
 model CardStates {
   id String @id
+  tableId String @map("table_id") @default("dev")
   itemType String @map("item_type") @default("card")
   isFlipped Boolean @map("is_flipped") @default(false)
   zIndex Int @map("z_index") @default(0)
