@@ -72,6 +72,8 @@ model CardStates {
   itemType String @map("item_type") @default("card")
   isFlipped Boolean @map("is_flipped") @default(false)
   zIndex Int @map("z_index") @default(0)
+  width Int @default(100)
+  height Int @default(140)
   x Int
   y Int
 

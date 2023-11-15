@@ -8,6 +8,10 @@ export interface CardState {
     itemType: string; // = "card" or "deck"
     isFlipped: boolean;
     zIndex: number;
+    dimension: {
+      width: number;
+      height: number;
+    };
     deltaPosition: {
       x: number;
       y: number;
