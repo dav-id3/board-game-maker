@@ -29,7 +29,10 @@ export default async function GamePage({
           itemType: value.itemType,
           isFlipped: value.isFlipped,
           zIndex: value.zIndex,
-          activeDrags: false,
+          dimension: {
+            width: value.width,
+            height: value.height,
+          },
           deltaPosition: {
             x: value.x,
             y: value.y,

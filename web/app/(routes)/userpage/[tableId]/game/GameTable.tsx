@@ -29,6 +29,10 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
         zIndex: targetCardState.data.zIndex,
+        dimension: {
+          width: targetCardState.data.dimension.width,
+          height: targetCardState.data.dimension.height,
+        },
         deltaPosition: {
           x: targetCardState.data.deltaPosition.x + ui.deltaX,
           y: targetCardState.data.deltaPosition.y + ui.deltaY,
@@ -49,6 +53,10 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         itemType: targetCardState.data.itemType,
         isFlipped: !targetCardState.data.isFlipped,
         zIndex: targetCardState.data.zIndex,
+        dimension: {
+          width: targetCardState.data.dimension.width,
+          height: targetCardState.data.dimension.height,
+        },
         deltaPosition: {
           x: targetCardState.data.deltaPosition.x,
           y: targetCardState.data.deltaPosition.y,
@@ -63,7 +71,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
 
     let maxZIndex = 0;
     cardState.forEach((value: CardState) => {
-      if (value.data.zIndex > maxZIndex) {
+      if (value.data.zIndex > maxZIndex && value.data.itemType === "card") {
         maxZIndex = value.data.zIndex;
       }
     });
@@ -76,6 +84,10 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
         zIndex: maxZIndex + 1,
+        dimension: {
+          width: targetCardState.data.dimension.width,
+          height: targetCardState.data.dimension.height,
+        },
         deltaPosition: {
           x: targetCardState.data.deltaPosition.x,
           y: targetCardState.data.deltaPosition.y,
@@ -83,31 +95,70 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       },
     });
   };
-  const onStop = (e: DraggableEvent, ui: DraggableData) => {
+
+  const handleShuffle = (deckState: CardState) => {
     const targetCardState = cardState.filter(
-      (value: CardState) => value.data.id === selectedId
-    )[0];
-    sendCardState({
-      topic: "cardState",
-      data: {
-        id: selectedId,
-        tableId: targetCardState.data.tableId,
-        itemType: targetCardState.data.itemType,
-        isFlipped: targetCardState.data.isFlipped,
-        zIndex: targetCardState.data.zIndex,
-        deltaPosition: {
-          x: targetCardState.data.deltaPosition.x + ui.deltaX,
-          y: targetCardState.data.deltaPosition.y + ui.deltaY,
+      (value: CardState) =>
+        value.data.deltaPosition.x >= deckState.data.deltaPosition.x &&
+        value.data.deltaPosition.y >= deckState.data.deltaPosition.y &&
+        value.data.dimension.height <= deckState.data.dimension.height &&
+        value.data.dimension.width <= deckState.data.dimension.width &&
+        value.data.itemType === "card"
+    );
+
+    const zIndexes = targetCardState.map(
+      (value: CardState) => value.data.zIndex
+    );
+    const shuffledZIndexes = zIndexes.sort((a, b) => 0.5 - Math.random());
+
+    targetCardState.forEach((value: CardState, index: number) => {
+      sendCardState({
+        topic: "cardState",
+        data: {
+          id: value.data.id,
+          tableId: value.data.tableId,
+          itemType: value.data.itemType,
+          isFlipped: value.data.isFlipped,
+          zIndex: shuffledZIndexes[index],
+          dimension: {
+            width: value.data.dimension.width,
+            height: value.data.dimension.height,
+          },
+          deltaPosition: {
+            x: value.data.deltaPosition.x,
+            y: value.data.deltaPosition.y,
+          },
         },
-      },
+      });
     });
   };
+
+  // const onStop = (e: DraggableEvent, ui: DraggableData) => {
+  //   const targetCardState = cardState.filter(
+  //     (value: CardState) => value.data.id === selectedId
+  //   )[0];
+  //   sendCardState({
+  //     topic: "cardState",
+  //     data: {
+  //       id: selectedId,
+  //       tableId: targetCardState.data.tableId,
+  //       itemType: targetCardState.data.itemType,
+  //       isFlipped: targetCardState.data.isFlipped,
+  //       zIndex: targetCardState.data.zIndex,
+  //       deltaPosition: {
+  //         x: targetCardState.data.deltaPosition.x + ui.deltaX,
+  //         y: targetCardState.data.deltaPosition.y + ui.deltaY,
+  //       },
+  //     },
+  //   });
+  // };
 
   return (
     <>
       {cardState.map((value: CardState) =>
         value.data.itemType === "card" ? (
           <GameCard
+            key={value.data.id}
             cardState={value}
             onDrag={handleDrag}
             onMouseDown={() => {
@@ -118,9 +169,13 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
           />
         ) : value.data.itemType === "deck" ? (
           <GameDeck
+            key={value.data.id}
             cardState={value}
             onDrag={handleDrag}
-            onMouseDown={() => setSelectedId(value.data.id)}
+            onMouseDown={() => {
+              setSelectedId(value.data.id);
+            }}
+            onClick={() => handleShuffle(value)}
           />
         ) : (
           <>{value.data.itemType}</>

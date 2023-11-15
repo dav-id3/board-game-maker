@@ -1,8 +1,8 @@
 import React from "react";
 import { getServerSession } from "next-auth/next";
 import { isRenderableProps } from "../../utils";
-import ChatPage from "./(chat)/page";
-import GamePage from "./(game)/page";
+import ChatPage from "./chat/page";
+import GamePage from "./game/page";
 import prisma from ".././../../../lib/prismadb";
 import { notFound } from "next/navigation";
 

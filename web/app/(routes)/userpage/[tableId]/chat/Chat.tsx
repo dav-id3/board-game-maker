@@ -37,7 +37,7 @@ export const Chat: FC<Props> = ({ initialMessages }) => {
         <ul>
           {messages.map((msg, idx) => {
             return (
-              <div>
+              <div key={idx}>
                 <li key={idx}>
                   {msg.data.name === "admin" ? (
                     <span>{msg.data.text}</span>

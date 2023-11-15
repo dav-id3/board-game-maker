@@ -10,18 +10,19 @@ const getInitialMessages = async (session: DefaultSession | null) => {
   const feed = await prisma.messages.findMany();
   if (feed === null) {
     return [
-      {
-        topic: "message",
-        data: {
-          name: "admin",
-          text: `${session?.user?.name}さんが入室しました`,
-        },
-      },
+      // {
+      //   topic: "message",
+      //   data: {
+      //     name: "admin",
+      //     text: `${session?.user?.name}さんが入室しました`,
+      //   },
+      // },
     ];
   } else {
     return feed.map((value) => ({
       topic: "message",
       data: {
+        id: value.id,
         name: value.name,
         text: value.text,
       },

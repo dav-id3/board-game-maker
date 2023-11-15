@@ -7,17 +7,26 @@ import { useCardState } from "./useCardState";
 import { CardState } from "./type";
 import { FC } from "react";
 import { DraggableEventHandler } from "react-draggable";
+import { MouseEventHandler } from "react";
 
 type Props = {
   cardState: CardState;
   onDrag: DraggableEventHandler | undefined;
   onMouseDown: ((e: MouseEvent) => void) | undefined;
+  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
 };
 
-export const GameDeck: FC<Props> = ({ cardState, onDrag, onMouseDown }) => {
+export const GameDeck: FC<Props> = ({
+  cardState,
+  onDrag,
+  onMouseDown,
+  onClick,
+}) => {
+  const nodeRef = React.useRef(null);
   return (
     <>
       <Draggable
+        nodeRef={nodeRef}
         onDrag={onDrag}
         onMouseDown={onMouseDown}
         position={{
@@ -25,19 +34,22 @@ export const GameDeck: FC<Props> = ({ cardState, onDrag, onMouseDown }) => {
           y: cardState.data.deltaPosition.y,
         }}
       >
-        <div className="absolute rounded-2xl w-[160px] h-[160px] p-0.5 z-10 left-0 right-0 ">
-          <div className="rounded-[14px] w-full h-full bg-white border border-gray-300 flex flex-col items-center justify-center space-y-3 px-5">
-            <div className="text-white text-[14px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[100px] h-[30px] flex items-center justify-center">
-              Deck
-            </div>
-            <div>content</div>
-            <div>
-              x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
-              {cardState.data.deltaPosition.y.toFixed(0)}
-            </div>
-            <div>
-              def x: {cardState.data.defaultPosition.x.toFixed(0)}, y:{" "}
-              {cardState.data.defaultPosition.y.toFixed(0)}
+        <div
+          ref={nodeRef}
+          style={{
+            width: cardState.data.dimension.width + "px",
+            height: cardState.data.dimension.height + "px",
+          }}
+          className="absolute rounded-2xl p-0.5 z-0 left-0 right-0 "
+        >
+          <div className="rounded-[14px] w-full h-full bg-white border border-gray-300">
+            <div className="flex flex-col items-center justify-center">
+              <button
+                onClick={onClick}
+                className="text-white text-[11px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[80px] h-[20px] flex items-center justify-center"
+              >
+                Shuffle deck
+              </button>
             </div>
           </div>
         </div>
