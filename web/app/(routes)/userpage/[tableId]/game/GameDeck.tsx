@@ -1,9 +1,7 @@
 "use client";
 
 import Draggable from "react-draggable"; // The default
-import { useState } from "react";
 import React, { ReactNode, ReactElement } from "react";
-import { useCardState } from "./useCardState";
 import { CardState } from "./type";
 import { FC } from "react";
 import { DraggableEventHandler } from "react-draggable";
@@ -42,8 +40,8 @@ export const GameDeck: FC<Props> = ({
           }}
           className="absolute rounded-2xl p-0.5 z-0 left-0 right-0 "
         >
-          <div className="rounded-[14px] w-full h-full bg-white border border-gray-300">
-            <div className="flex flex-col items-center justify-center">
+          <div className="rounded-[14px] w-full h-full bg-white border border-dashed border-gray-400">
+            <div className="flex flex-col items-center justify-center mt-1">
               <button
                 onClick={onClick}
                 className="text-white text-[11px] font-mono bg-black hover:bg-gray-700 transition-all rounded-md w-[80px] h-[20px] flex items-center justify-center"
