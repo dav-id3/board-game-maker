@@ -16,6 +16,7 @@ type Props = {
   onDrag: DraggableEventHandler | undefined;
   onMouseDown: ((e: MouseEvent) => void) | undefined;
   onDoubleClick: MouseEventHandler<HTMLDivElement> | undefined;
+  handleContentChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const rotatingCard =
@@ -28,6 +29,7 @@ export const GameCard: FC<Props> = ({
   onDrag,
   onMouseDown,
   onDoubleClick,
+  handleContentChange,
 }) => {
   const nodeRef = React.useRef(null);
   const cardStyle = cardState.data.isFlipped ? rotatingCard : notRotatingCard;
@@ -54,12 +56,27 @@ export const GameCard: FC<Props> = ({
         >
           <div className={cardStyle}>
             <div className="absolute rounded-[11px] w-full h-full bg-white border border-gray-300 [backfaceVisibility:hidden]">
-              <div className="flex flex-col items-center justify-center mt-1">
-                <div className="text-white text-[11px] font-mono bg-black transition-all rounded-md w-[80px] h-[20px] flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center ">
+                <div className="mt-0.5 text-white text-[9px] font-mono bg-black transition-all rounded-md w-[80px] h-[12px] flex items-center justify-center">
                   Card {cardState.data.id}
                 </div>
-                <div className="text-[11px] flex items-center">content</div>
-                <div className="absolute text-[11px] bottom-0">
+                <div
+                  className="rounded-[5px] mt-0.5 border border-gray-300"
+                  style={{
+                    height: cardState.data.dimension.height * 0.45 + "px",
+                    width: cardState.data.dimension.width * 0.92 + "px",
+                  }}
+                />
+                <textarea
+                  className="rounded-[5px] mt-1 text-[9px] overflow-auto border border-gray-300"
+                  rows={3}
+                  value={cardState.data.content}
+                  onChange={(e) => handleContentChange(e)}
+                  style={{
+                    width: cardState.data.dimension.width * 0.92 + "px",
+                  }}
+                />
+                <div className="absolute text-[6.5px] bottom-0">
                   x: {cardState.data.deltaPosition.x.toFixed(0)}, y:{" "}
                   {cardState.data.deltaPosition.y.toFixed(0)}
                 </div>

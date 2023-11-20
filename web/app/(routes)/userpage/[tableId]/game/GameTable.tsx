@@ -29,6 +29,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
         zIndex: targetCardState.data.zIndex,
+        content: targetCardState.data.content,
         dimension: {
           width: targetCardState.data.dimension.width,
           height: targetCardState.data.dimension.height,
@@ -53,6 +54,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         itemType: targetCardState.data.itemType,
         isFlipped: !targetCardState.data.isFlipped,
         zIndex: targetCardState.data.zIndex,
+        content: targetCardState.data.content,
         dimension: {
           width: targetCardState.data.dimension.width,
           height: targetCardState.data.dimension.height,
@@ -84,6 +86,31 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
         itemType: targetCardState.data.itemType,
         isFlipped: targetCardState.data.isFlipped,
         zIndex: maxZIndex + 1,
+        content: targetCardState.data.content,
+        dimension: {
+          width: targetCardState.data.dimension.width,
+          height: targetCardState.data.dimension.height,
+        },
+        deltaPosition: {
+          x: targetCardState.data.deltaPosition.x,
+          y: targetCardState.data.deltaPosition.y,
+        },
+      },
+    });
+  };
+  const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const targetCardState = cardState.filter(
+      (value: CardState) => value.data.id === selectedId
+    )[0];
+    sendCardState({
+      topic: "cardState",
+      data: {
+        id: selectedId,
+        tableId: targetCardState.data.tableId,
+        itemType: targetCardState.data.itemType,
+        isFlipped: targetCardState.data.isFlipped,
+        zIndex: targetCardState.data.zIndex,
+        content: e.target.value,
         dimension: {
           width: targetCardState.data.dimension.width,
           height: targetCardState.data.dimension.height,
@@ -120,6 +147,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
           itemType: value.data.itemType,
           isFlipped: value.data.isFlipped,
           zIndex: shuffledZIndexes[index],
+          content: value.data.content,
           dimension: {
             width: value.data.dimension.width,
             height: value.data.dimension.height,
@@ -166,6 +194,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
               handleMoveToFront(value.data.id);
             }}
             onDoubleClick={handleFlip}
+            handleContentChange={handleContentChange}
           />
         ) : value.data.itemType === "deck" ? (
           <GameDeck

@@ -21,6 +21,7 @@ export default async function GamePage({
     if (feed === null || feed.length === 0) {
       return [];
     } else {
+      console.log(feed);
       return feed.map((value, i) => ({
         topic: "cardState",
         data: {
@@ -29,6 +30,7 @@ export default async function GamePage({
           itemType: value.itemType,
           isFlipped: value.isFlipped,
           zIndex: value.zIndex,
+          content: value.content,
           dimension: {
             width: value.width,
             height: value.height,
