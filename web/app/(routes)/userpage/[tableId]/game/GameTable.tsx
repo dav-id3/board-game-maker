@@ -8,9 +8,34 @@ import { FC } from "react";
 import { GameCard } from "./GameCard";
 import { GameDeck } from "./GameDeck";
 import { DraggableEvent, DraggableData } from "react-draggable";
+import { GameHandsArea } from "./GameHandsArea";
 
 type Props = {
   initialCardState: CardState[];
+};
+export const isCardInHandsArea = (card: CardState, allItems: CardState[]) => {
+  const handsArea = allItems.filter(
+    (value: CardState) => value.data.itemType === "handsArea"
+  );
+  let isInHandsArea = false;
+  handsArea.map((handsAreaState: CardState) => {
+    if (
+      !(
+        card.data.deltaPosition.x >= handsAreaState.data.deltaPosition.x &&
+        card.data.deltaPosition.y >= handsAreaState.data.deltaPosition.y &&
+        card.data.deltaPosition.y + card.data.dimension.height <=
+          handsAreaState.data.deltaPosition.y +
+            handsAreaState.data.dimension.height &&
+        card.data.deltaPosition.x + card.data.dimension.width <=
+          handsAreaState.data.deltaPosition.x +
+            handsAreaState.data.dimension.width &&
+        card.data.itemType === "card"
+      )
+    ) {
+      isInHandsArea = true;
+    }
+  });
+  return isInHandsArea;
 };
 
 export const GameTable: FC<Props> = ({ initialCardState }) => {
@@ -21,7 +46,8 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
     const targetCardState = cardState.filter(
       (value: CardState) => value.data.id === selectedId
     )[0];
-    sendCardState({
+
+    let sentCardState: CardState = {
       topic: "cardState",
       data: {
         id: selectedId,
@@ -39,14 +65,15 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
           y: targetCardState.data.deltaPosition.y + ui.deltaY,
         },
       },
-    });
+    };
+    sendCardState(sentCardState);
   };
 
   const handleFlip = () => {
     const targetCardState = cardState.filter(
       (value: CardState) => value.data.id === selectedId
     )[0];
-    sendCardState({
+    const sentCardState: CardState = {
       topic: "cardState",
       data: {
         id: selectedId,
@@ -64,7 +91,8 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
           y: targetCardState.data.deltaPosition.y,
         },
       },
-    });
+    };
+    sendCardState(sentCardState, isCardInHandsArea(sentCardState, cardState));
   };
   const handleMoveToFront = (selectedId: string | number) => {
     const targetCardState = cardState.filter(
@@ -78,7 +106,7 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
       }
     });
 
-    sendCardState({
+    const sentCardState: CardState = {
       topic: "cardState",
       data: {
         id: selectedId,
@@ -96,7 +124,9 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
           y: targetCardState.data.deltaPosition.y,
         },
       },
-    });
+    };
+
+    sendCardState(sentCardState);
   };
   const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const targetCardState = cardState.filter(
@@ -161,26 +191,6 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
     });
   };
 
-  // const onStop = (e: DraggableEvent, ui: DraggableData) => {
-  //   const targetCardState = cardState.filter(
-  //     (value: CardState) => value.data.id === selectedId
-  //   )[0];
-  //   sendCardState({
-  //     topic: "cardState",
-  //     data: {
-  //       id: selectedId,
-  //       tableId: targetCardState.data.tableId,
-  //       itemType: targetCardState.data.itemType,
-  //       isFlipped: targetCardState.data.isFlipped,
-  //       zIndex: targetCardState.data.zIndex,
-  //       deltaPosition: {
-  //         x: targetCardState.data.deltaPosition.x + ui.deltaX,
-  //         y: targetCardState.data.deltaPosition.y + ui.deltaY,
-  //       },
-  //     },
-  //   });
-  // };
-
   return (
     <>
       {cardState.map((value: CardState) =>
@@ -198,6 +208,16 @@ export const GameTable: FC<Props> = ({ initialCardState }) => {
           />
         ) : value.data.itemType === "deck" ? (
           <GameDeck
+            key={value.data.id}
+            cardState={value}
+            onDrag={handleDrag}
+            onMouseDown={() => {
+              setSelectedId(value.data.id);
+            }}
+            onClick={() => handleShuffle(value)}
+          />
+        ) : value.data.itemType === "handsArea" ? (
+          <GameHandsArea
             key={value.data.id}
             cardState={value}
             onDrag={handleDrag}
