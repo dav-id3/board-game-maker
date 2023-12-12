@@ -1,9 +1,9 @@
-export interface CardState {
+export type CardState = {
   topic: string;
   data: {
     id: string | number;
     tableId: string;
-    itemType: string; // = "card" or "deck"
+    itemType: "card" | "deck" | "handsArea";
     isFlipped: boolean;
     zIndex: number;
     content: string;
@@ -16,4 +16,4 @@ export interface CardState {
       y: number;
     };
   };
-}
+};

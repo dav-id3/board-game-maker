@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { CardState } from "./type";
+import { isCardInHandsArea } from "./GameTable";
 
 const API_ENDPOINT =
   process.env.NEXT_PUBLIC_API_HOST + ":" + process.env.NEXT_PUBLIC_API_PORT;
@@ -18,14 +19,21 @@ export const useCardState = (initialCardState: CardState[]) => {
       withCredentials: true,
     });
     // @ts-ignore
-    socketRef.current.on("broadcast", (payload: Message) => {
+    socketRef.current.on("broadcast", (payload: CardState) => {
       console.log("Recieved: " + payload);
       if (payload.topic === "cardState") {
-        setCardState((prevCardState) =>
-          prevCardState.map((value) =>
+        setCardState((prevCardState) => {
+          if (!isCardInHandsArea(payload, prevCardState)) {
+            prevCardState.map((value) => {
+              if (value.data.id === payload.data.id) {
+                payload.data.isFlipped = value.data.isFlipped;
+              }
+            });
+          }
+          return prevCardState.map((value) =>
             value.data.id === payload.data.id ? payload : value
-          )
-        );
+          );
+        });
       }
     });
     return () => {
@@ -35,9 +43,14 @@ export const useCardState = (initialCardState: CardState[]) => {
     };
   }, []);
 
-  const sendCardState = (newCardState: CardState) => {
-    // @ts-ignore
-    socketRef.current.emit("send", newCardState);
+  const sendCardState = (
+    newCardState: CardState,
+    isBroaded: boolean = true
+  ) => {
+    if (isBroaded) {
+      // @ts-ignore
+      socketRef.current.emit("send", newCardState);
+    }
     setCardState((prevCardState) =>
       prevCardState.map((value) =>
         value.data.id === newCardState.data.id ? newCardState : value
